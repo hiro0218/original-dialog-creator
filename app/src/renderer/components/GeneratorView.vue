@@ -1,18 +1,15 @@
 <template>
   <form v-on:submit.prevent="onSubmit" class="ui form">
-    <div class="ui equal width padded grid container">
+    <div class="ui equal width centered padded grid">
+
       <div class="row">
         <fieldset class="column group-message">
           <legend>メッセージ</legend>
           <div class="field">
-            <label>
-              <input v-model="message" class="form-control" value="" placeholder="本文">
-            </label>
+            <input v-model="message" class="form-control" value="" placeholder="本文">
           </div>
           <div class="field">
-            <label>
-              <input v-model="detail" class="form-control" value="" placeholder="詳細">
-            </label>
+            <input v-model="detail" class="form-control" value="" placeholder="詳細">
           </div>
         </fieldset>
       </div>
@@ -55,7 +52,7 @@
       </div>
     </div>
 
-    <button class="ui primary button" type="submit">Submit</button>
+    <button class="ui primary button" type="submit">ダイアログ作成</button>
   </form>
 </template>
 
@@ -102,6 +99,7 @@ export default {
         message: this.message,
         detail: this.detail,
         type: type,
+        cancelId: 1,
         buttons: this.pickBtnLabel()
       })
     },
@@ -121,6 +119,9 @@ export default {
 </script>
 
 <style scoped>
+legend {
+  font-weight: bold;
+}
 .ui.checkbox label {
   cursor: pointer;
 }
