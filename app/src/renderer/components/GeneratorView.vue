@@ -57,7 +57,9 @@
 </template>
 
 <script>
+const path = require('path')
 const {dialog} = require('electron').remote
+const nativeImage = require('electron').remote.nativeImage
 
 export default {
   components: {},
@@ -70,11 +72,10 @@ export default {
         name: 'dialog-icon',
         value: 0,
         iconOpt: [
-          { label: '質問', type: 'question', value: 0 },
-          { label: '情報', type: 'info', value: 1 },
-          { label: '警告', type: 'warning', value: 2 },
-          { label: '中止', type: 'error', value: 3 },
-          { label: 'なし', type: 'none', value: 4 }
+          { label: '情報', type: 'info', value: 0 },
+          { label: '警告', type: 'warning', value: 1 },
+          { label: '中止 / エラー', type: 'error', value: 2 },
+          { label: 'なし', type: 'none', value: 3 }
         ]
       },
       btn: {
@@ -93,12 +94,13 @@ export default {
   },
   methods: {
     createDialog: function () {
-      var type = this.pickDialogType()
+      var iconType = this.pickDialogType()
+      var iconPath = this.switchIcon(iconType)
 
       dialog.showMessageBox({
         message: this.message,
         detail: this.detail,
-        type: type,
+        icon: nativeImage.createFromPath(iconPath),
         cancelId: 1,
         buttons: this.pickBtnLabel()
       })
@@ -110,6 +112,28 @@ export default {
     pickDialogType: function () {
       var iconType = this.icon.iconOpt[this.icon.value].type
       return iconType
+    },
+    switchIcon: function (type) {
+      var iconPath = './app/icons/CoreServices/'
+
+      switch (type) {
+        case 'warning':
+        // case 'question':
+          iconPath = path.join(iconPath, 'AlertCautionIcon.png')
+          break
+        case 'error':
+          iconPath = path.join(iconPath, 'AlertStopIcon.png')
+          break
+        case 'none':
+          iconPath = path.join(iconPath, 'AlertNoneIcon.png')
+          break
+        case 'info':
+        default:
+          iconPath = path.join(iconPath, 'AlertNoteIcon.png')
+          break
+      }
+
+      return iconPath
     },
     onSubmit: function () {
       this.createDialog()
