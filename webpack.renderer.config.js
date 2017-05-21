@@ -61,7 +61,7 @@ let rendererConfig = {
         use: {
           loader: 'url-loader',
           query: {
-            limit: 10000,
+            limit: 0,
             name: 'imgs/[name].[ext]'
           }
         }

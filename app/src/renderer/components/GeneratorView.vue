@@ -60,6 +60,12 @@
 const path = require('path')
 const {dialog} = require('electron').remote
 const nativeImage = require('electron').remote.nativeImage
+const images = {
+  caution: require('renderer/components/assets/img/AlertCautionIcon.png'),
+  none: require('renderer/components/assets/img/AlertNoneIcon.png'),
+  note: require('renderer/components/assets/img/AlertNoteIcon.png'),
+  stop: require('renderer/components/assets/img/AlertStopIcon.png')
+}
 
 export default {
   components: {},
@@ -95,12 +101,12 @@ export default {
   methods: {
     createDialog: function () {
       var iconType = this.pickDialogType()
-      var iconPath = this.switchIcon(iconType)
+      var iconData = this.switchIcon(iconType)
 
       dialog.showMessageBox({
         message: this.message,
         detail: this.detail,
-        icon: nativeImage.createFromPath(iconPath),
+        icon: nativeImage.createFromDataURL(iconData),
         cancelId: 1,
         buttons: this.pickBtnLabel()
       })
@@ -114,26 +120,26 @@ export default {
       return iconType
     },
     switchIcon: function (type) {
-      var iconPath = './app/icons/CoreServices/'
+      var iconData = ''
 
       switch (type) {
         case 'warning':
         // case 'question':
-          iconPath = path.join(iconPath, 'AlertCautionIcon.png')
+          iconData = images.stop
           break
         case 'error':
-          iconPath = path.join(iconPath, 'AlertStopIcon.png')
+          iconData = images.caution
           break
         case 'none':
-          iconPath = path.join(iconPath, 'AlertNoneIcon.png')
+          iconData = images.none
           break
         case 'info':
         default:
-          iconPath = path.join(iconPath, 'AlertNoteIcon.png')
+          iconData = images.note
           break
       }
 
-      return iconPath
+      return iconData
     },
     onSubmit: function () {
       this.createDialog()
