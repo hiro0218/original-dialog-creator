@@ -18,7 +18,7 @@
         <fieldset class="column group-icon">
           <legend>ダイアログのアイコン</legend>
           <div class="grouped fields">
-            <div class="field" v-for="r in icon.iconOpt">
+            <div class="field" v-for="r in icon.Opt">
               <div class="ui radio checkbox">
                 <input type="radio"
                 v-model="icon.value"
@@ -57,14 +57,12 @@
 </template>
 
 <script>
-const path = require('path')
-const {dialog} = require('electron').remote
-const nativeImage = require('electron').remote.nativeImage
+const {dialog, nativeImage} = require('electron').remote
 const images = {
-  caution: require('renderer/components/assets/img/AlertCautionIcon.png'),
-  none: require('renderer/components/assets/img/AlertNoneIcon.png'),
-  note: require('renderer/components/assets/img/AlertNoteIcon.png'),
-  stop: require('renderer/components/assets/img/AlertStopIcon.png')
+  caution: nativeImage.createFromDataURL(require('renderer/components/assets/img/AlertCautionIcon.png')),
+  none: nativeImage.createFromDataURL(require('renderer/components/assets/img/AlertNoneIcon.png')),
+  note: nativeImage.createFromDataURL(require('renderer/components/assets/img/AlertNoteIcon.png')),
+  stop: nativeImage.createFromDataURL(require('renderer/components/assets/img/AlertStopIcon.png'))
 }
 
 export default {
@@ -77,7 +75,7 @@ export default {
       icon: {
         name: 'dialog-icon',
         value: 0,
-        iconOpt: [
+        Opt: [
           { label: '情報', type: 'info', value: 0 },
           { label: '警告', type: 'warning', value: 1 },
           { label: '中止 / エラー', type: 'error', value: 2 },
@@ -106,7 +104,7 @@ export default {
       dialog.showMessageBox({
         message: this.message,
         detail: this.detail,
-        icon: nativeImage.createFromDataURL(iconData),
+        icon: iconData,
         cancelId: 1,
         buttons: this.pickBtnLabel()
       })
@@ -116,7 +114,7 @@ export default {
       return (btnLabel) ? btnLabel.split(',') : ['']
     },
     pickDialogType: function () {
-      var iconType = this.icon.iconOpt[this.icon.value].type
+      var iconType = this.icon.Opt[this.icon.value].type
       return iconType
     },
     switchIcon: function (type) {
